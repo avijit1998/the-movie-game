@@ -9,39 +9,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+
+import MovieCard from './MovieCard'
 
 
 function App() {
 
   return (
     <>
-      <Card className="w-[350px]">
+    <Card className="w-[500px]">
       <CardHeader>
         <CardTitle>Question 1</CardTitle>
-        <CardDescription>Which form looks better?</CardDescription>
+        <CardDescription className="text-lg font-bold">Which of these movies have a happy ending?</CardDescription>
       </CardHeader>
-      <CardContent className="flex justify-around">
-        <Button>Card1</Button>
-        <Button>Card2</Button>
-
-        
+      <CardContent className="justify-around">
+        <div className="flex">
+          <MovieCard/>
+          <MovieCard/>
+        </div>
+        <div className="mb-2 text-lg font-semibold text-center">
+          Movie 1 was the right answer.
+        </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+      <CardFooter className="flex justify-center">
+        <Button>Next</Button>
       </CardFooter>
     </Card>
-      
-      
     </>
   )
 }
