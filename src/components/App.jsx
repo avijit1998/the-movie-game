@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,15 +13,37 @@ import {
 
 import MovieCard from './MovieCard'
 
-
 function App() {
+  
+  const [questionNum, setQuestionNum] = useState(1);
+
+  const changeQNum = () => {
+    if (questionNum < 5) {
+      setQuestionNum(questionNum + 1);
+    }
+  };
+
+  const questions = [
+    'Which of these two films has a happier ending?', 
+    'Which of these two films is more popular?', 
+    'Which of these two films has a bittersweet ending?', 
+    'Which of these films would you rewatch?', 
+    'Which of these films is overrated?'
+  ];
+  
+  const [currentQuestion, setCurrentQuestion] = useState(questions[0]);
+
+  const nextQuestion = () => {
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    setCurrentQuestion(questions[randomIndex]);
+  };
 
   return (
     <>
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Question 1</CardTitle>
-        <CardDescription className="text-lg font-bold">Which of these movies have a happy ending?</CardDescription>
+        <CardTitle>Question {questionNum}</CardTitle>
+        <CardDescription className="text-lg font-bold">{currentQuestion}</CardDescription>
       </CardHeader>
       <CardContent className="justify-around">
         <div className="flex">
@@ -32,7 +55,14 @@ function App() {
         </div>
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button>Next</Button>
+      <Button onClick={() => {
+        if (questionNum === 5) {
+          window.location.reload();
+        } else {
+          changeQNum();
+          nextQuestion();
+        }
+      }}>Next</Button>
       </CardFooter>
     </Card>
     </>
