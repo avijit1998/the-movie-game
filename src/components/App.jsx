@@ -16,11 +16,18 @@ import MovieCard from './MovieCard'
 function App() {
   
   const [questionNum, setQuestionNum] = useState(1);
+  const [key1, setKey1] = useState(Date.now());
+  const [key2, setKey2] = useState(Date.now() + 1);
 
   const changeQNum = () => {
     if (questionNum < 5) {
       setQuestionNum(questionNum + 1);
     }
+  };
+
+  const remountMovieCard = () => {
+    setKey1(Date.now());
+    setKey2(Date.now() + 1);
   };
 
   const questions = [
@@ -47,8 +54,8 @@ function App() {
       </CardHeader>
       <CardContent className="justify-around">
         <div className="flex">
-          <MovieCard/>
-          <MovieCard/>
+          <MovieCard key={key1}/>
+          <MovieCard key={key2}/>
         </div>
         <div className="mb-2 text-lg font-semibold text-center">
           Movie 1 was the right answer.
@@ -61,6 +68,7 @@ function App() {
         } else {
           changeQNum();
           nextQuestion();
+          remountMovieCard();
         }
       }}>Next</Button>
       </CardFooter>
