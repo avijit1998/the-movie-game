@@ -13,13 +13,13 @@ function MovieCard() {
         }
     };
 
-    
-
     useEffect(() => {
         const fetchImage = async () => {
           let movie;
+          const pageNumber = Math.floor(Math.random() * 17) + 1;
+          const apiURL = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page='+pageNumber+'&primary_release_date.gte=1970-01-01&primary_release_date.lte=2000-01-01&sort_by=primary_release_date.desc&vote_count.gte=1&with_original_language=hi&with_people=35780%7C103883%7C87561%7C110721%7C85655%7C616995%7C84956';
           do {
-            const response = await fetch('https://api.themoviedb.org/3/movie/18/similar?language=en-US&page=1', options);
+            const response = await fetch(apiURL, options);
             const movies = await response.json();
             const randomIndex = Math.floor(Math.random() * 20);
             movie = movies.results[randomIndex];
