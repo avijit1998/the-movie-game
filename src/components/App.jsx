@@ -35,6 +35,7 @@ function App() {
   const [opt2ImgUrl, setOpt2ImgUrl] = useState('');
   const [opt2Name, setOpt2Name] = useState('');
   const [opt2Id, setOpt2Id] = useState(null);
+  const [selectedOpt, setSelectedOpt] = useState('');
 
   const changeQNum = () => {
     if (questionNum < 5) {
@@ -61,6 +62,10 @@ function App() {
     fetchMovie(setOpt2ImgUrl, setOpt2Name, setOpt2Id).catch(err => console.error(err));
   }
 
+  const callback = (value) => {
+    setSelectedOpt(value);
+  }
+
   useEffect(() => {
     setFirstMvOpt();
     setSecondMvOpt();
@@ -76,19 +81,19 @@ function App() {
       <CardContent className="justify-around">
         <div className="flex">
           {(opt1ImgUrl.length > 0) ? (
-            <MovieCard id={opt1Id} name={opt1Name} poster={opt1ImgUrl}/>
+            <MovieCard id={opt1Id} name={opt1Name} poster={opt1ImgUrl} selectedOpt={selectedOpt} callback={callback}/>
           ) : (
             <Skeleton/>
           )}
 
           {(opt2ImgUrl.length > 0) ? (
-            <MovieCard id={opt2Id} name={opt2Name} poster={opt2ImgUrl}/>
+            <MovieCard id={opt2Id} name={opt2Name} poster={opt2ImgUrl} selectedOpt={selectedOpt} callback={callback}/>
           ) : (
             <Skeleton/>
           )} 
         </div>
         <div className="mb-2 text-lg font-semibold text-center">
-          Movie 1 was the right answer.
+          {selectedOpt} was selected.
         </div>
       </CardContent>
       <CardFooter className="flex justify-center">
@@ -100,6 +105,7 @@ function App() {
           nextQuestion();
           setFirstMvOpt();
           setSecondMvOpt();
+          setSelectedOpt('');
         }
       }}>Next</Button>
       </CardFooter>

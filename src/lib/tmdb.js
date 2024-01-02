@@ -15,8 +15,8 @@ async function fetchMovie(setOptImgUrl, setOptName, setOptId) {
             const response = await fetch(apiURL, options);
             const movies = await response.json();
             const randomIndex = Math.floor(Math.random() * 20);
-            movie = movies.results[randomIndex];
-        } while (!movie.poster_path && !movie.title);
+            movie = await movies.results[randomIndex];
+        } while (!movie.title);
 
         setOptImgUrl('https://image.tmdb.org/t/p/w500' + movie.poster_path);
         setOptName(movie.title);
