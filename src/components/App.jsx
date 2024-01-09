@@ -73,7 +73,7 @@ function App() {
 
   return (
     <>
-    <Card className="w-[500px]">
+    <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Question {questionNum}</CardTitle>
         <CardDescription className="text-lg font-bold">{currentQuestion}</CardDescription>

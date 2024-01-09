@@ -9,8 +9,8 @@ function MovieCard({id, name, poster, selectedOpt, callback}) {
     
     return (
         <>
-        <div className="w-1/2 rounded-lg bg-white shadow-lg m-5 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover: duration-300">
-                    <img src={poster} alt={id} className="rounded-lg object-contain shadow-lg"/>
+        <div className="w-1/2 rounded-lg bg-white shadow-lg m-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover: duration-300">
+                    <img src={poster} alt={id} className="rounded-lg object-contain shadow-lg h-48 w-full"/>
                     <div className="p-4">
                         <h2 className="mb-2 text-lg font-semibold">{name}</h2>
                         {(selectedOpt.length > 0) ? ( 
