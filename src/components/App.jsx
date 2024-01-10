@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-
+import { createClient } from '@supabase/supabase-js'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Skeleton from "./Skeleton"
-
 
 import MovieCard from './MovieCard'
 import { fetchMovie } from "@/lib/tmdb"
@@ -62,7 +61,19 @@ function App() {
     fetchMovie(setOpt2ImgUrl, setOpt2Name, setOpt2Id).catch(err => console.error(err));
   }
 
+  const test = async (name) => {
+    const supabase = createClient(:import.meta.env.SUPABASE_URL,:import.meta.env.SUPABASE_KEY)
+    const { count, error } = await supabase.from('movies_opinions').select('*', { count: 'exact', head: true });
+    if (count === 0) {
+      const { data, error } = await supabase.from('movies_opinions').insert([{ 
+        movie_tmdb_name: name
+       },]).select();
+       console.log(data);
+    }
+    console.log(count);
+  }
   const callback = (value) => {
+    test(value);
     setSelectedOpt(value);
   }
 
@@ -92,9 +103,11 @@ function App() {
             <Skeleton/>
           )} 
         </div>
-        <div className="mb-2 text-lg font-semibold text-center">
+        {selectedOpt.length > 0 ? (<div className="mb-2 text-lg font-semibold text-center">
           {selectedOpt} was selected.
-        </div>
+        </div>) : (<div className="mb-2 text-lg font-semibold text-center">
+          No option is selected.
+        </div>)}
       </CardContent>
       <CardFooter className="flex justify-center">
       <Button onClick={() => {
