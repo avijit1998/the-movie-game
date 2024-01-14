@@ -62,16 +62,21 @@ function App() {
   }
 
   const test = async (name) => {
-    const supabase = createClient(:import.meta.env.SUPABASE_URL,:import.meta.env.SUPABASE_KEY)
-    const { count, error } = await supabase.from('movies_opinions').select('*', { count: 'exact', head: true });
+    const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,import.meta.env.VITE_SUPABASE_KEY);
+    const { count, error } = await supabase
+    .from('movies_opinions')
+    .select('*', { count: 'exact', head: true })
+    .filter('movie_tmdb_name','eq',name);
     if (count === 0) {
       const { data, error } = await supabase.from('movies_opinions').insert([{ 
         movie_tmdb_name: name
-       },]).select();
-       console.log(data);
+      },]);
+    } else {
+      const { data, error } = await supabase
+      .rpc('increment_value', { movie_name: name, increment_by: 1 });
     }
-    console.log(count);
   }
+
   const callback = (value) => {
     test(value);
     setSelectedOpt(value);
