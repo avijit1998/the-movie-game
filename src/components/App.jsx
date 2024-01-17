@@ -1,6 +1,5 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { createClient } from '@supabase/supabase-js'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -14,7 +13,7 @@ import Skeleton from "./Skeleton"
 
 import MovieCard from './MovieCard'
 import { fetchMovie } from "@/lib/tmdb"
-
+import { updateRecordsAndReturnPct } from "@/lib/supabaselib"
 
 function App() {
   const questions = [
@@ -35,6 +34,7 @@ function App() {
   const [opt2Name, setOpt2Name] = useState('');
   const [opt2Id, setOpt2Id] = useState(null);
   const [selectedOpt, setSelectedOpt] = useState('');
+  const [finalResult, setFinalResult] = useState('');
 
   const changeQNum = () => {
     if (questionNum < 5) {
@@ -61,25 +61,24 @@ function App() {
     fetchMovie(setOpt2ImgUrl, setOpt2Name, setOpt2Id).catch(err => console.error(err));
   }
 
-  const test = async (name) => {
-    const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,import.meta.env.VITE_SUPABASE_KEY);
-    const { count, error } = await supabase
-    .from('movies_opinions')
-    .select('*', { count: 'exact', head: true })
-    .filter('movie_tmdb_name','eq',name);
-    if (count === 0) {
-      const { data, error } = await supabase.from('movies_opinions').insert([{ 
-        movie_tmdb_name: name
-      },]);
-    } else {
-      const { data, error } = await supabase
-      .rpc('increment_value', { movie_name: name, increment_by: 1 });
-    }
-  }
-
-  const callback = (value) => {
-    test(value);
+  const callback = async (value) => {
     setSelectedOpt(value);
+
+    let choice = 0;
+
+    if(value === opt1Name) { 
+      choice = 1; 
+    } else {
+      choice = 2; 
+    }
+
+    const str1 = await updateRecordsAndReturnPct(opt1Name, choice, 1, opt2Name);
+    const str2 = await updateRecordsAndReturnPct(opt2Name, choice, 2, opt1Name);
+
+    if(str1.length > 0)
+      setFinalResult(str1);
+    if(str2.length > 0)
+      setFinalResult(str2);
   }
 
   useEffect(() => {
@@ -108,9 +107,15 @@ function App() {
             <Skeleton/>
           )} 
         </div>
-        {selectedOpt.length > 0 ? (<div className="mb-2 text-lg font-semibold text-center">
-          {selectedOpt} was selected.
-        </div>) : (<div className="mb-2 text-lg font-semibold text-center">
+        {selectedOpt.length > 0 ? finalResult.length > 0 ? (
+          <div className="mb-2 text-lg font-semibold text-center">
+          {finalResult}
+        </div>
+        ) : ( 
+          <div className="mb-2 text-lg font-semibold text-center">
+            {selectedOpt} was selected.
+          </div>
+          ) : (<div className="mb-2 text-lg font-semibold text-center">
           No option is selected.
         </div>)}
       </CardContent>
@@ -124,6 +129,7 @@ function App() {
           setFirstMvOpt();
           setSecondMvOpt();
           setSelectedOpt('');
+          setFinalResult('');
         }
       }}>Next</Button>
       </CardFooter>
