@@ -65,16 +65,20 @@ function App() {
     setSelectedOpt(value);
 
     let choice = 0;
+    let str1 = '';
+    let str2 = '';
 
     if(value === opt1Name) { 
       choice = 1; 
+      str2 = await updateRecordsAndReturnPct(opt2Name, choice, 2, opt1Name);
+      str1 = await updateRecordsAndReturnPct(opt1Name, choice, 1, opt2Name);
     } else {
-      choice = 2; 
+      choice = 2;
+      str1 = await updateRecordsAndReturnPct(opt1Name, choice, 1, opt2Name); 
+      str2 = await updateRecordsAndReturnPct(opt2Name, choice, 2, opt1Name);
     }
 
-    const str1 = await updateRecordsAndReturnPct(opt1Name, choice, 1, opt2Name);
-    const str2 = await updateRecordsAndReturnPct(opt2Name, choice, 2, opt1Name);
-
+    
     if(str1.length > 0)
       setFinalResult(str1);
     if(str2.length > 0)
@@ -112,12 +116,18 @@ function App() {
           {finalResult}
         </div>
         ) : ( 
-          <div className="mb-2 text-lg font-semibold text-center">
-            {selectedOpt} was selected.
+          <div className="mb-2 text-center">
+            <div className="loader" id="loader-4">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-          ) : (<div className="mb-2 text-lg font-semibold text-center">
+          ) : (
+          <div className="mb-2 text-lg font-semibold text-center">
           No option is selected.
-        </div>)}
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-center">
       <Button onClick={() => {

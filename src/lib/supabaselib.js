@@ -32,7 +32,8 @@ async function updateRecordsAndReturnPct(movieName, choice, selectedOpt, otherMo
       let happyChoiceMv1 = 0;
       let happyChoiceMv2 = 0;
       let percentage = 0;
-      if(data[0] === movieName){
+
+      if(data[0].movie_tmdb_name === movieName){
         happyChoiceMv1 = await data[0].happy_choice;
         happyChoiceMv2 = await data[1].happy_choice;
       } else {
